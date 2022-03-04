@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 public class Member {
     @Id @GeneratedValue
-    @Column(name = "member_id")
+    @Column(name = "member_id") //테이블칼람
     private Long id;
     private String name;
 
