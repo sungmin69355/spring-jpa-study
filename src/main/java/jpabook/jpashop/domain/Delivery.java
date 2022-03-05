@@ -13,7 +13,7 @@ public class Delivery {
     @Column(name ="delivery_id")
     private Long id;
 
-    @OneToOne(mappedBy = "delivery") //Order 테이블의 delivery 컬럼의 연관관계 매핑
+    @OneToOne(mappedBy = "delivery",fetch = FetchType.LAZY) //Order 테이블의 delivery 컬럼의 연관관계 매핑
     private Order order;
 
     @Embedded
@@ -23,3 +23,4 @@ public class Delivery {
     private DeliveryStatus status; //READY, COMP
 
 }
+
