@@ -1,17 +1,17 @@
 package jpabook.jpashop.repository;
 
 import jpabook.jpashop.domain.Member;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository //빈등록
+@RequiredArgsConstructor //스프링부트에서는 생성자 주입으로 레파지토리 생성가능, 엔티티도 @PersistenceContext 없이 @Autowired로 가능
 public class MemberRepository {
 
-    @PersistenceContext
-    private EntityManager em; //엔티티매니저만들어서 위임한다.
+    private final EntityManager em; //엔티티매니저만들어서 위임한다.
 
     public void save(Member member){
         em.persist(member);
