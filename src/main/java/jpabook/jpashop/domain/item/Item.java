@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -33,16 +34,16 @@ public abstract class Item {
     /**
      * stock 증가
      */
-    public void addStock(int quantity){
+    public void addStock(int quantity) {
         this.stockQuantity += quantity;
     }
 
     /**
      * stock 감소
      */
-    public void removeStock(int quantity){
+    public void removeStock(int quantity) {
         int restStock = this.stockQuantity - quantity;
-        if(restStock < 0){
+        if (restStock < 0) {
             throw new NotEnoughStockException("need more stock");
         }
     }
