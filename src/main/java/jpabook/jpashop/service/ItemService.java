@@ -14,7 +14,7 @@ import java.util.List;
 public class ItemService {
     private final ItemRepository itemRepository;
 
-    @Transactional
+    @Transactional //readOnly로 설정해놨기 때문에 해당 서비스에서는 저장이 안된다. 따라서 오버라이딩을 해줘야 저장이 가능
     public void saveItem(Item item){
         itemRepository.save(item);
     }
