@@ -1,13 +1,16 @@
 package jpabook.jpashop.domain;
 
 import jpabook.jpashop.domain.item.Item;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Getter @Setter
+//@NoArgsConstructor(access = AccessLevel.PROTECTED) protected로 new 생성 불가하게
 public class OrderItem {
     @Id @GeneratedValue
     @Column(name= "order_item_id")
@@ -23,6 +26,10 @@ public class OrderItem {
 
     private int orderPrice; //주문 가격
     private int count; //주문 수량
+
+    protected OrderItem(){
+        // new로 생성할수없도록 선언
+    }
 
     //== 셍성 메서드==//
     public static OrderItem createOrderItem(Item item, int orderPrice, int count){

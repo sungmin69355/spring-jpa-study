@@ -1,6 +1,8 @@
 package jpabook.jpashop.domain;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -11,6 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "orders")
 @Getter @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED) //protected로 new 생성 불가하게
 public class Order {
     @Id
     @GeneratedValue @Column(name = "order_id")
@@ -19,7 +22,7 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "member_id")
     private Member member; //주문 회원
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL) // CascadeType 떄문에 퍼시스트해준다.
     private List<OrderItem> orderItems = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) @JoinColumn(name = "delivery_id") //1대1 관계에서 order에서 조회가 더많이 일어나니 Order 테이블에서 delivery_id를 여기서 연관관계 주인이된다.
