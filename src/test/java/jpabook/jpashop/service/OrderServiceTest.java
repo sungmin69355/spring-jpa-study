@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @WebAppConfiguration
@@ -70,10 +71,18 @@ public class OrderServiceTest {
     @Test
     public void 주문취소() throws Exception {
         //given
+        Member member = createMember();
+        Item item = createBook("JPA book", 10000, 10); //이름, 가격, 재고
 
+        int orderCount = 2;
+
+        Long orderId = orderService.order(member.getId(), item.getId(), orderCount);
         //when
-
+        orderService.cancelOrder(orderId);
         //then
+        Order getOrder = orderRepository.findOne(orderId);
+        Assert.assertEquals("주문 취소시 상태는 CANCEL 이다. ", OrderStatus.CANCEL, getOrder.getStatus());
+        Assert.assertEquals("주문이 취소된 상품은 그만큼 재고가 증가해야 한다.", 10, item.getStockQuantity());
     }
 
     private Member createMember() {
