@@ -2,12 +2,11 @@ package jpabook.jpashop.api;
 
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.service.MemberService;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -44,6 +43,30 @@ public class MemberApiController {
         return new CreateMemberResponse(id);
     }
 
+    /**
+     * 수정 API
+     */
+    @PutMapping("/api/v2/members/{id}")
+    public UpdateMemberResponse updateMemberV2(@PathVariable("id") Long id, @RequestBody @Validated UpdateMemberRequest request) {
+
+        memberService.update(id, request.getName());
+        //반환값이 없도록 함 (카멘드랑 쿼리는 분리하자) 필요하다면 id 정도만 반환하도록 한다.
+        //만약 반환값이 Member 라면 영속성 컨텍스트가 끊긴 상태로 반환되는데 이는 커맨드랑 조회쿼리랑 같이있는 꼴이 된다.
+        Member findMember = memberService.findOne(id);
+        return new UpdateMemberResponse(findMember.getId(), findMember.getName());
+    }
+
+    @Data
+    static class UpdateMemberRequest {
+        private String name;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class UpdateMemberResponse {
+        private Long id;
+        private String name;
+    }
 
     @Data
     static class CreateMemberRequest {
