@@ -2,6 +2,7 @@ package jpabook.jpashop.repository;
 
 import jpabook.jpashop.domain.Order;
 
+import jpabook.jpashop.repository.order.simplequery.OrderSimpleQueryDto;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -128,6 +129,18 @@ public class OrderRepository {
                                 " join fetch o.delivery d", Order.class)
                 .setFirstResult(offset)
                 .setMaxResults(limit)
+                .getResultList();
+    }
+
+    /**
+     * 이렇게 만들면 재사용성이 거의없지만, 필요한 정보만 선택해서 가져올 수 있다는 장점이 있다.
+     */
+    public List<OrderSimpleQueryDto> findOrderDtos() {
+       return em.createQuery("select new jpabook.jpashop.repository.OrderSimpleQueryDto(o.id, m.name,\n" +
+                       "o.orderDate, o.status, d.address) " +
+                                "from Order o" +
+                                " join o.member m" +
+                                " join o.delivery d", OrderSimpleQueryDto.class)
                 .getResultList();
     }
 }
