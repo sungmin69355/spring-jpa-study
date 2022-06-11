@@ -102,6 +102,8 @@ public class OrderRepository {
     }
 
     public List<Order> findAllWithMemberDelivery() {
+
+        // LAZY 걸어놓은 것을 fetch join으로 한 번에 다 가져온다.
         return em.createQuery(
                         "select o from Order o" +
                                 " join fetch o.member m" +
