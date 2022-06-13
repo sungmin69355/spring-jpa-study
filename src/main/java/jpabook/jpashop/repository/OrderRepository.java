@@ -113,6 +113,14 @@ public class OrderRepository {
     }
 
     public List<Order> findAllWithItem() {
+        /**
+         * 페치 조인으로 SQL이 1번만 실행됨
+         * distinct 를 사용한 이유는 1:N 조인이 있으므로 데이터베이스 row가 증가한다. 그 결과 같은 order 엔티티의 조회 수도 증가하게 된다.
+         * JPA의 distinct는 SQL에 distinct를 추가하고, 더해서 같은 엔티티가 조회되면, 애플리케이션에서 중복을 걸러준다.
+         * 이 예에서 order가 컬렉션 페치 조인 때문에 중복 조회 되는 것을 막아준다.
+         * 1:N 관계에서 패치조인을 하면 페이징 불가능 중요!!!
+         * 컬렉션 페치 조인은 1개만 사용할 수 있다. 컬렉션 둘 이상에 페치 조인을 사용하면 안된다. 데이터가 부정합하게 조회될 수 있다.
+         */
         return em.createQuery(
                         "select distinct o from Order o" +
                                 " join fetch o.member m" +
@@ -136,7 +144,7 @@ public class OrderRepository {
      * 이렇게 만들면 재사용성이 거의없지만, 필요한 정보만 선택해서 가져올 수 있다는 장점이 있다.
      */
     public List<OrderSimpleQueryDto> findOrderDtos() {
-       return em.createQuery("select new jpabook.jpashop.repository.OrderSimpleQueryDto(o.id, m.name,\n" +
+       return em.createQuery("select new jpabook.jpashop.repository.order.simplequery.OrderSimpleQueryDto(o.id, m.name,\n" +
                        "o.orderDate, o.status, d.address) " +
                                 "from Order o" +
                                 " join o.member m" +
