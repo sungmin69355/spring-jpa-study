@@ -24,9 +24,11 @@ import static jpabook.jpashop.domain.QOrder.order;
 public class OrderRepository {
 
     private final EntityManager em;
+    private final JPAQueryFactory query;
 
     public OrderRepository(EntityManager em) {
         this.em = em;
+        this.query = new JPAQueryFactory(em);
     }
 
     public void save(Order order) {
@@ -82,8 +84,7 @@ public class OrderRepository {
         return query.getResultList();
     }
 
-    public List<Order> findAll(OrderSearch orderSearch){
-        JPAQueryFactory query = new JPAQueryFactory(em);
+    public List<Order> findAll(OrderSearch orderSearch) {
         QOrder order = QOrder.order;
         QMember member = QMember.member;
 
